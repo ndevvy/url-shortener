@@ -1,0 +1,17 @@
+puts "Enter your email: "
+email = gets.chomp
+current_user = User.find_by_email(email)
+puts "VISIT or CREATE a shortened URL?"
+choice = gets.chomp
+if choice.downcase == "visit"
+  puts "Enter shortened URL: "
+  input_short_url = gets.chomp
+  Visit.record_visit!(current_user.id, input_short_url)
+  long_url = ShortenedUrl.return_long_url_string_from_short_url(input_short_url)
+  Launchy.open(long_url)
+elsif choice.downcase == "create"
+  puts "Enter URL to shorten: "
+  long_url = gets.chomp
+  new_short_url = ShortenedUrl.create_for_user_and_long_url!(current_user.id, long_url)
+  puts "Your short URL is: #{new_short_url.short_url}"
+end
